@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phone Image Preview - Real Size Display</title>
+    <title>Phone Image Preview - Real Physical Size</title>
     <style>
         * {
             margin: 0;
@@ -247,13 +247,23 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 5px;
         }
+        
+        .calibration-note {
+            background: #fff8e1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #5d4037;
+            border-left: 4px solid #ffb300;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Phone Image Preview</h1>
-            <p class="description">Upload an image to see how it looks on various phone screens at 100% actual size. Images will be displayed at their native resolution without scaling.</p>
+            <h1>Phone Image Preview - Real Physical Size</h1>
+            <p class="description">Upload an image to see how it looks on various phone screens at 100% actual size. Phones are displayed at their real physical dimensions based on your screen's pixel density.</p>
         </header>
         
         <div class="content">
@@ -270,6 +280,10 @@
                 <div class="controls">
                     <button class="btn" id="resetBtn">Reset</button>
                     <button class="btn" id="downloadBtn">Download Preview</button>
+                </div>
+                
+                <div class="calibration-note">
+                    <strong>Note:</strong> For accurate physical dimensions, we've detected your screen has approximately <span id="detectedPPI">96</span> PPI. If this seems incorrect, you can <button id="calibrateBtn" style="background: none; border: none; color: #1a2a6c; text-decoration: underline; cursor: pointer;">calibrate manually</button>.
                 </div>
                 
                 <h3 style="margin-top: 30px;">Select Phone Model</h3>
@@ -305,7 +319,7 @@
             </div>
             
             <div class="preview-section">
-                <h2>Phone Preview</h2>
+                <h2>Phone Preview (Real Physical Size)</h2>
                 <div class="preview-container">
                     <div class="phone-frame" id="phoneFrame">
                         <div class="phone-screen" id="phoneScreen">
@@ -332,8 +346,12 @@
                             <span id="selectedDevice">iPhone 15</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Device Resolution:</span>
-                            <span id="deviceResolution">1179 × 2556</span>
+                            <span class="info-label">Physical Size:</span>
+                            <span id="physicalSize">14.76 × 7.16 cm</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Screen PPI:</span>
+                            <span id="devicePPI">-</span>
                         </div>
                     </div>
                 </div>
@@ -343,26 +361,116 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Phone specifications (width x height in pixels)
+            // Phone specifications (physical dimensions in cm and screen PPI)
             const phoneSpecs = {
                 // iPhones
-                'iphone-15': { width: 1179, height: 2556, name: 'iPhone 15', type: 'apple' },
-                'iphone-15-pro': { width: 1179, height: 2556, name: 'iPhone 15 Pro', type: 'apple' },
-                'iphone-14': { width: 1170, height: 2532, name: 'iPhone 14', type: 'apple' },
-                'iphone-14-pro': { width: 1179, height: 2556, name: 'iPhone 14 Pro', type: 'apple' },
-                'iphone-13': { width: 1170, height: 2532, name: 'iPhone 13', type: 'apple' },
-                'iphone-13-mini': { width: 1080, height: 2340, name: 'iPhone 13 Mini', type: 'apple' },
-                'iphone-12': { width: 1170, height: 2532, name: 'iPhone 12', type: 'apple' },
-                'iphone-11': { width: 828, height: 1792, name: 'iPhone 11', type: 'apple' },
-                'iphone-x': { width: 1125, height: 2436, name: 'iPhone X', type: 'apple' },
+                'iphone-15': { 
+                    width: 7.16, 
+                    height: 14.76, 
+                    name: 'iPhone 15', 
+                    type: 'apple',
+                    screenPPI: 461
+                },
+                'iphone-15-pro': { 
+                    width: 7.09, 
+                    height: 14.66, 
+                    name: 'iPhone 15 Pro', 
+                    type: 'apple',
+                    screenPPI: 460
+                },
+                'iphone-14': { 
+                    width: 7.15, 
+                    height: 14.67, 
+                    name: 'iPhone 14', 
+                    type: 'apple',
+                    screenPPI: 460
+                },
+                'iphone-14-pro': { 
+                    width: 7.07, 
+                    height: 14.75, 
+                    name: 'iPhone 14 Pro', 
+                    type: 'apple',
+                    screenPPI: 460
+                },
+                'iphone-13': { 
+                    width: 7.15, 
+                    height: 14.67, 
+                    name: 'iPhone 13', 
+                    type: 'apple',
+                    screenPPI: 460
+                },
+                'iphone-13-mini': { 
+                    width: 6.42, 
+                    height: 13.15, 
+                    name: 'iPhone 13 Mini', 
+                    type: 'apple',
+                    screenPPI: 476
+                },
+                'iphone-12': { 
+                    width: 7.15, 
+                    height: 14.67, 
+                    name: 'iPhone 12', 
+                    type: 'apple',
+                    screenPPI: 460
+                },
+                'iphone-11': { 
+                    width: 7.57, 
+                    height: 15.09, 
+                    name: 'iPhone 11', 
+                    type: 'apple',
+                    screenPPI: 326
+                },
+                'iphone-x': { 
+                    width: 7.09, 
+                    height: 14.36, 
+                    name: 'iPhone X', 
+                    type: 'apple',
+                    screenPPI: 458
+                },
                 
                 // Androids
-                'samsung-s23': { width: 1080, height: 2340, name: 'Samsung Galaxy S23', type: 'android' },
-                'samsung-s22': { width: 1080, height: 2340, name: 'Samsung Galaxy S22', type: 'android' },
-                'pixel-7': { width: 1080, height: 2400, name: 'Google Pixel 7', type: 'android' },
-                'pixel-6': { width: 1080, height: 2400, name: 'Google Pixel 6', type: 'android' },
-                'oneplus-10': { width: 1080, height: 2400, name: 'OnePlus 10', type: 'android' },
-                'xiaomi-13': { width: 1080, height: 2400, name: 'Xiaomi 13', type: 'android' }
+                'samsung-s23': { 
+                    width: 7.06, 
+                    height: 14.66, 
+                    name: 'Samsung Galaxy S23', 
+                    type: 'android',
+                    screenPPI: 425
+                },
+                'samsung-s22': { 
+                    width: 7.06, 
+                    height: 14.66, 
+                    name: 'Samsung Galaxy S22', 
+                    type: 'android',
+                    screenPPI: 425
+                },
+                'pixel-7': { 
+                    width: 7.32, 
+                    height: 15.56, 
+                    name: 'Google Pixel 7', 
+                    type: 'android',
+                    screenPPI: 416
+                },
+                'pixel-6': { 
+                    width: 7.41, 
+                    height: 15.87, 
+                    name: 'Google Pixel 6', 
+                    type: 'android',
+                    screenPPI: 411
+                },
+                'oneplus-10': { 
+                    width: 7.39, 
+                    height: 16.32, 
+                    name: 'OnePlus 10', 
+                    type: 'android',
+                    screenPPI: 394
+                },
+                'xiaomi-13': { 
+                    width: 7.15, 
+                    height: 15.24, 
+                    name: 'Xiaomi 13', 
+                    type: 'android',
+                    screenPPI: 413
+                }
             };
 
             // Get DOM elements
@@ -376,13 +484,20 @@
             const screenResolution = document.getElementById('screenResolution');
             const imageDimensions = document.getElementById('imageDimensions');
             const selectedDevice = document.getElementById('selectedDevice');
-            const deviceResolution = document.getElementById('deviceResolution');
+            const physicalSize = document.getElementById('physicalSize');
+            const devicePPI = document.getElementById('devicePPI');
             const phoneFrame = document.getElementById('phoneFrame');
             const phoneScreen = document.getElementById('phoneScreen');
             const phoneButtons = document.querySelectorAll('.phone-btn');
+            const detectedPPI = document.getElementById('detectedPPI');
+            const calibrateBtn = document.getElementById('calibrateBtn');
+            
+            // Calculate screen PPI
+            let screenPPI = calculateScreenPPI();
+            detectedPPI.textContent = Math.round(screenPPI);
             
             // Set screen resolution info
-            screenResolution.textContent = `${window.screen.width} × ${window.screen.height}`;
+            screenResolution.textContent = `${window.screen.width} × ${window.screen.height} (${Math.round(screenPPI)} PPI)`;
             
             // Set initial phone (iPhone 15)
             let currentPhone = 'iphone-15';
@@ -427,7 +542,46 @@
                 });
             });
             
+            calibrateBtn.addEventListener('click', function() {
+                const userPPI = prompt("Enter your screen's PPI (pixels per inch):", Math.round(screenPPI));
+                if (userPPI && !isNaN(userPPI) && userPPI > 0) {
+                    screenPPI = parseFloat(userPPI);
+                    detectedPPI.textContent = Math.round(screenPPI);
+                    screenResolution.textContent = `${window.screen.width} × ${window.screen.height} (${Math.round(screenPPI)} PPI)`;
+                    updatePhoneDisplay();
+                }
+            });
+            
             // Functions
+            function calculateScreenPPI() {
+                // Calculate screen PPI based on diagonal size and resolution
+                // This is an approximation since we can't get exact physical screen size
+                const diagonalPixels = Math.sqrt(
+                    Math.pow(window.screen.width, 2) + 
+                    Math.pow(window.screen.height, 2)
+                );
+                
+                // Estimate diagonal size in inches based on common device sizes
+                let diagonalInches;
+                if (window.screen.width <= 1024) {
+                    diagonalInches = 13; // Laptop
+                } else if (window.screen.width <= 1440) {
+                    diagonalInches = 15; // Medium laptop
+                } else if (window.screen.width <= 1920) {
+                    diagonalInches = 24; // Desktop monitor
+                } else {
+                    diagonalInches = 27; // Large monitor
+                }
+                
+                return diagonalPixels / diagonalInches;
+            }
+            
+            function cmToPixels(cm) {
+                // Convert cm to pixels based on screen PPI
+                const inches = cm / 2.54;
+                return inches * screenPPI;
+            }
+            
             function handleImageUpload() {
                 if (fileInput.files && fileInput.files[0]) {
                     const reader = new FileReader();
@@ -459,12 +613,13 @@
             function updatePhoneDisplay() {
                 const phone = phoneSpecs[currentPhone];
                 selectedDevice.textContent = phone.name;
-                deviceResolution.textContent = `${phone.width} × ${phone.height}`;
+                physicalSize.textContent = `${phone.width} × ${phone.height} cm`;
+                devicePPI.textContent = `${phone.screenPPI} PPI`;
                 
                 // Update phone frame appearance based on type
                 if (phone.type === 'apple') {
                     phoneFrame.style.background = 'linear-gradient(135deg, #000, #333)';
-                    phoneFrame.style.borderRadius = '50px';
+                    phoneFrame.style.borderRadius = '40px';
                     phoneFrame.style.boxShadow = `
                         0 0 0 4px #333,
                         0 0 0 8px #000,
@@ -473,7 +628,7 @@
                     `;
                 } else {
                     phoneFrame.style.background = 'linear-gradient(135deg, #1a2a6c, #3a4a9c)';
-                    phoneFrame.style.borderRadius = '30px';
+                    phoneFrame.style.borderRadius = '25px';
                     phoneFrame.style.boxShadow = `
                         0 0 0 3px #3a4a9c,
                         0 0 0 6px #1a2a6c,
@@ -489,18 +644,23 @@
             function updatePhoneScreen() {
                 const phone = phoneSpecs[currentPhone];
                 
-                // Set phone frame size (adding borders)
-                const frameWidth = phone.width + 40;
-                const frameHeight = phone.height + 100;
+                // Convert physical dimensions to pixels
+                const frameWidthPx = cmToPixels(phone.width);
+                const frameHeightPx = cmToPixels(phone.height);
                 
-                phoneFrame.style.width = `${frameWidth}px`;
-                phoneFrame.style.height = `${frameHeight}px`;
-                phoneFrame.style.padding = '20px';
+                // Set phone frame size
+                phoneFrame.style.width = `${frameWidthPx}px`;
+                phoneFrame.style.height = `${frameHeightPx}px`;
+                phoneFrame.style.padding = '15px';
+                
+                // Calculate screen size (approximately 90% of frame size)
+                const screenWidthPx = frameWidthPx * 0.9;
+                const screenHeightPx = frameHeightPx * 0.95;
                 
                 // Set phone screen size
-                phoneScreen.style.width = `${phone.width}px`;
-                phoneScreen.style.height = `${phone.height}px`;
-                phoneScreen.style.borderRadius = phone.type === 'apple' ? '40px' : '20px';
+                phoneScreen.style.width = `${screenWidthPx}px`;
+                phoneScreen.style.height = `${screenHeightPx}px`;
+                phoneScreen.style.borderRadius = phone.type === 'apple' ? '30px' : '15px';
                 
                 // Add notch for iPhones
                 if (phone.type === 'apple') {
@@ -519,9 +679,9 @@
                     notch.style.left = '50%';
                     notch.style.transform = 'translateX(-50%)';
                     notch.style.width = '30%';
-                    notch.style.height = '30px';
+                    notch.style.height = '20px';
                     notch.style.background = '#000';
-                    notch.style.borderRadius = '0 0 15px 15px';
+                    notch.style.borderRadius = '0 0 10px 10px';
                     notch.style.zIndex = '10';
                     
                     phoneScreen.appendChild(notch);
@@ -543,76 +703,78 @@
                 }
                 
                 const phone = phoneSpecs[currentPhone];
-                const frameWidth = phone.width + 40;
-                const frameHeight = phone.height + 100;
+                const frameWidthPx = cmToPixels(phone.width);
+                const frameHeightPx = cmToPixels(phone.height);
                 
                 // Create a canvas to draw the phone frame and image
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
                 // Set canvas dimensions
-                canvas.width = frameWidth;
-                canvas.height = frameHeight;
+                canvas.width = frameWidthPx;
+                canvas.height = frameHeightPx;
                 
                 // Draw phone frame
                 if (phone.type === 'apple') {
                     // iPhone frame
                     ctx.fillStyle = '#000';
-                    ctx.fillRect(0, 0, frameWidth, frameHeight);
+                    ctx.fillRect(0, 0, frameWidthPx, frameHeightPx);
                     
                     // Frame border
                     ctx.strokeStyle = '#333';
                     ctx.lineWidth = 4;
-                    ctx.strokeRect(2, 2, frameWidth-4, frameHeight-4);
+                    ctx.strokeRect(2, 2, frameWidthPx-4, frameHeightPx-4);
                     
                     // Inner frame
                     ctx.strokeStyle = '#000';
                     ctx.lineWidth = 8;
-                    ctx.strokeRect(4, 4, frameWidth-8, frameHeight-8);
+                    ctx.strokeRect(4, 4, frameWidthPx-8, frameHeightPx-8);
                 } else {
                     // Android frame
-                    const gradient = ctx.createLinearGradient(0, 0, frameWidth, frameHeight);
+                    const gradient = ctx.createLinearGradient(0, 0, frameWidthPx, frameHeightPx);
                     gradient.addColorStop(0, '#1a2a6c');
                     gradient.addColorStop(1, '#3a4a9c');
                     
                     ctx.fillStyle = gradient;
-                    ctx.fillRect(0, 0, frameWidth, frameHeight);
+                    ctx.fillRect(0, 0, frameWidthPx, frameHeightPx);
                     
                     // Frame border
                     ctx.strokeStyle = '#3a4a9c';
                     ctx.lineWidth = 3;
-                    ctx.strokeRect(1.5, 1.5, frameWidth-3, frameHeight-3);
+                    ctx.strokeRect(1.5, 1.5, frameWidthPx-3, frameHeightPx-3);
                     
                     // Inner frame
                     ctx.strokeStyle = '#1a2a6c';
                     ctx.lineWidth = 6;
-                    ctx.strokeRect(3, 3, frameWidth-6, frameHeight-6);
+                    ctx.strokeRect(3, 3, frameWidthPx-6, frameHeightPx-6);
                 }
                 
                 // Draw screen
                 ctx.fillStyle = '#fff';
-                const screenX = 20;
-                const screenY = 50;
+                const screenX = frameWidthPx * 0.05;
+                const screenY = frameHeightPx * 0.025;
+                const screenWidth = frameWidthPx * 0.9;
+                const screenHeight = frameHeightPx * 0.95;
                 
                 if (phone.type === 'apple') {
-                    ctx.fillRect(screenX, screenY, phone.width, phone.height);
+                    ctx.fillRect(screenX, screenY, screenWidth, screenHeight);
                     
                     // Draw notch
                     ctx.fillStyle = '#000';
-                    const notchWidth = phone.width * 0.3;
-                    const notchX = screenX + (phone.width - notchWidth) / 2;
-                    ctx.fillRect(notchX, screenY, notchWidth, 30);
+                    const notchWidth = screenWidth * 0.3;
+                    const notchX = screenX + (screenWidth - notchWidth) / 2;
+                    ctx.fillRect(notchX, screenY, notchWidth, 20);
                     ctx.fillStyle = '#fff';
                 } else {
-                    ctx.fillRect(screenX, screenY, phone.width, phone.height);
+                    ctx.fillRect(screenX, screenY, screenWidth, screenHeight);
                 }
                 
                 // Draw the uploaded image on the screen
                 const img = new Image();
                 img.onload = function() {
                     // Draw image at 100% size, centered on screen
-                    const imgX = screenX + (phone.width - img.width) / 2;
-                    const imgY = screenY + (phone.height - img.height) / 2;
+                    const imgX = screenX + (screenWidth - img.width) / 2;
+                    const imgY = screenY + (screenHeight - img.height) / 2;
                     
                     ctx.drawImage(img, imgX, imgY, img.width, img.height);
                     
