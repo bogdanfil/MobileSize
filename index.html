@@ -31,17 +31,15 @@
             padding: 20px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            backdrop-filter: blur(10px);
         }
         
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .description {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             max-width: 800px;
             margin: 0 auto 20px;
             line-height: 1.6;
@@ -52,7 +50,6 @@
             flex-wrap: wrap;
             gap: 30px;
             justify-content: center;
-            width: 100%;
         }
         
         .upload-section {
@@ -89,17 +86,6 @@
             border-color: #fdbb2d;
         }
         
-        .upload-area i {
-            font-size: 48px;
-            color: #1a2a6c;
-            margin-bottom: 15px;
-        }
-        
-        .upload-area p {
-            margin-bottom: 15px;
-            color: #666;
-        }
-        
         .btn {
             background: #1a2a6c;
             color: white;
@@ -110,17 +96,11 @@
             font-size: 1rem;
             font-weight: 600;
             transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(26, 42, 108, 0.3);
         }
         
         .btn:hover {
             background: #fdbb2d;
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(26, 42, 108, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
         }
         
         #fileInput {
@@ -150,14 +130,6 @@
             color: white;
         }
         
-        .phone-btn.apple {
-            border-left: 3px solid #999;
-        }
-        
-        .phone-btn.android {
-            border-left: 3px solid #3ddc84;
-        }
-        
         .preview-container {
             position: relative;
             margin-bottom: 20px;
@@ -165,34 +137,27 @@
         
         .phone-frame {
             position: relative;
-            background-size: contain;
-            background-repeat: no-repeat;
+            background: #000;
+            border-radius: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
+            box-shadow: 
+                0 0 0 4px #333,
+                0 0 0 8px #000,
+                0 20px 40px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease;
         }
         
         .phone-screen {
             position: absolute;
             background: white;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: grab;
-        }
-        
-        .phone-screen.dragging {
-            cursor: grabbing;
+            border-radius: 30px;
         }
         
         #previewImage {
-            max-width: none;
-            max-height: none;
-            display: none;
             position: absolute;
-            top: 0;
-            left: 0;
             cursor: grab;
             user-select: none;
         }
@@ -238,28 +203,36 @@
             justify-content: center;
         }
         
-        @media (max-width: 768px) {
-            .content {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .upload-section, .preview-section {
-                width: 100%;
-            }
+        .rotation-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
         }
-
-        .phone-category {
-            width: 100%;
-            margin-bottom: 15px;
+        
+        .rotation-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-
-        .category-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a2a6c;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
+        
+        .rotation-btn.active {
+            background: #1a2a6c;
+            color: white;
+        }
+        
+        .drag-instructions {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #0d47a1;
+            border-left: 4px solid #2196f3;
+            text-align: center;
         }
         
         .ppi-calculator {
@@ -270,32 +243,10 @@
             border-left: 4px solid #ffb300;
         }
         
-        .calculator-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
         .calculator-title {
             font-weight: 600;
             color: #5d4037;
-        }
-        
-        .calculator-toggle {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: #1a2a6c;
-        }
-        
-        .calculator-content {
-            display: block;
-        }
-        
-        .calculator-content.hidden {
-            display: none;
+            margin-bottom: 10px;
         }
         
         .calculator-inputs {
@@ -342,15 +293,17 @@
             border-left: 4px solid #4caf50;
         }
         
-        .drag-instructions {
-            background: #e3f2fd;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #0d47a1;
-            border-left: 4px solid #2196f3;
-            text-align: center;
+        .phone-category {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .category-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a2a6c;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
         }
     </style>
 </head>
@@ -358,14 +311,13 @@
     <div class="container">
         <header>
             <h1>Phone Image Preview - Real Physical Size</h1>
-            <p class="description">Upload an image to see how it looks on various phone screens at 100% actual size. Phones are displayed at their real physical dimensions based on your screen's pixel density.</p>
+            <p class="description">Upload an image to see how it looks on various phone screens. Images are displayed at their actual pixel dimensions relative to phone resolution.</p>
         </header>
         
         <div class="content">
             <div class="upload-section">
                 <h2>Upload Your Image</h2>
                 <div class="upload-area" id="uploadArea">
-                    <i>📱</i>
                     <p>Drag & drop your image here or click to browse</p>
                     <p class="file-types">Supported formats: JPG, PNG, GIF, WebP</p>
                     <button class="btn" id="browseBtn">Browse Files</button>
@@ -378,29 +330,24 @@
                 </div>
                 
                 <div class="ppi-calculator">
-                    <div class="calculator-header">
-                        <div class="calculator-title">Screen PPI Calculator</div>
-                        <button class="calculator-toggle" id="calculatorToggle">−</button>
+                    <div class="calculator-title">Screen PPI Calculator</div>
+                    <div class="calculator-inputs">
+                        <div class="input-group">
+                            <label for="screenWidth">Screen Width (pixels):</label>
+                            <input type="number" id="screenWidth" value="1920">
+                        </div>
+                        <div class="input-group">
+                            <label for="screenHeight">Screen Height (pixels):</label>
+                            <input type="number" id="screenHeight" value="1080">
+                        </div>
+                        <div class="input-group">
+                            <label for="screenDiagonal">Screen Diagonal (inches):</label>
+                            <input type="number" id="screenDiagonal" value="24" step="0.1">
+                        </div>
                     </div>
-                    <div class="calculator-content" id="calculatorContent">
-                        <div class="calculator-inputs">
-                            <div class="input-group">
-                                <label for="screenWidth">Screen Width (pixels):</label>
-                                <input type="number" id="screenWidth" value="1920">
-                            </div>
-                            <div class="input-group">
-                                <label for="screenHeight">Screen Height (pixels):</label>
-                                <input type="number" id="screenHeight" value="1080">
-                            </div>
-                            <div class="input-group">
-                                <label for="screenDiagonal">Screen Diagonal (inches):</label>
-                                <input type="number" id="screenDiagonal" value="24" step="0.1">
-                            </div>
-                        </div>
-                        <button class="btn" id="calculateBtn" style="width: 100%; margin-bottom: 10px;">Calculate PPI</button>
-                        <div class="calculator-result">
-                            Your Screen PPI: <span id="calculatedPPI">96</span>
-                        </div>
+                    <button class="btn" id="calculateBtn" style="width: 100%; margin-bottom: 10px;">Calculate PPI</button>
+                    <div class="calculator-result">
+                        Your Screen PPI: <span id="calculatedPPI">96</span>
                     </div>
                 </div>
                 
@@ -412,65 +359,59 @@
                     <strong>Tip:</strong> Click and drag the image to reposition it on the phone screen
                 </div>
                 
+                <div class="rotation-controls">
+                    <button class="rotation-btn active" data-orientation="portrait">Portrait</button>
+                    <button class="rotation-btn" data-orientation="landscape">Landscape</button>
+                </div>
+                
                 <h3 style="margin-top: 30px;">Select Phone Model</h3>
                 
                 <div class="phone-selector">
                     <div class="phone-category">
                         <div class="category-title">iPhone</div>
                         <div>
-                            <button class="phone-btn apple active" data-device="iphone-17">iPhone 17</button>
-                            <button class="phone-btn apple" data-device="iphone-17-pro">iPhone 17 Pro</button>
-                            <button class="phone-btn apple" data-device="iphone-17-pro-max">iPhone 17 Pro Max</button>
-                            <button class="phone-btn apple" data-device="iphone-16">iPhone 16</button>
-                            <button class="phone-btn apple" data-device="iphone-16-pro">iPhone 16 Pro</button>
-                            <button class="phone-btn apple" data-device="iphone-16-pro-max">iPhone 16 Pro Max</button>
-                            <button class="phone-btn apple" data-device="iphone-15">iPhone 15</button>
-                            <button class="phone-btn apple" data-device="iphone-15-pro">iPhone 15 Pro</button>
-                            <button class="phone-btn apple" data-device="iphone-15-pro-max">iPhone 15 Pro Max</button>
-                            <button class="phone-btn apple" data-device="iphone-14">iPhone 14</button>
-                            <button class="phone-btn apple" data-device="iphone-14-pro">iPhone 14 Pro</button>
-                            <button class="phone-btn apple" data-device="iphone-14-pro-max">iPhone 14 Pro Max</button>
-                            <button class="phone-btn apple" data-device="iphone-13">iPhone 13</button>
-                            <button class="phone-btn apple" data-device="iphone-13-mini">iPhone 13 Mini</button>
-                            <button class="phone-btn apple" data-device="iphone-13-pro">iPhone 13 Pro</button>
-                            <button class="phone-btn apple" data-device="iphone-13-pro-max">iPhone 13 Pro Max</button>
-                            <button class="phone-btn apple" data-device="iphone-12">iPhone 12</button>
-                            <button class="phone-btn apple" data-device="iphone-12-pro">iPhone 12 Pro</button>
-                            <button class="phone-btn apple" data-device="iphone-12-pro-max">iPhone 12 Pro Max</button>
-                            <button class="phone-btn apple" data-device="iphone-11">iPhone 11</button>
-                            <button class="phone-btn apple" data-device="iphone-11-pro">iPhone 11 Pro</button>
-                            <button class="phone-btn apple" data-device="iphone-11-pro-max">iPhone 11 Pro Max</button>
-                            <button class="phone-btn apple" data-device="iphone-x">iPhone X</button>
+                            <button class="phone-btn active" data-device="iphone-15">iPhone 15</button>
+                            <button class="phone-btn" data-device="iphone-15-pro">iPhone 15 Pro</button>
+                            <button class="phone-btn" data-device="iphone-15-pro-max">iPhone 15 Pro Max</button>
+                            <button class="phone-btn" data-device="iphone-16">iPhone 16</button>
+                            <button class="phone-btn" data-device="iphone-16-pro">iPhone 16 Pro</button>
+                            <button class="phone-btn" data-device="iphone-16-pro-max">iPhone 16 Pro Max</button>
+                            <button class="phone-btn" data-device="iphone-17">iPhone 17</button>
+                            <button class="phone-btn" data-device="iphone-17-pro">iPhone 17 Pro</button>
+                            <button class="phone-btn" data-device="iphone-17-pro-max">iPhone 17 Pro Max</button>
+                            <button class="phone-btn" data-device="iphone-14">iPhone 14</button>
+                            <button class="phone-btn" data-device="iphone-14-pro">iPhone 14 Pro</button>
+                            <button class="phone-btn" data-device="iphone-14-pro-max">iPhone 14 Pro Max</button>
+                            <button class="phone-btn" data-device="iphone-13">iPhone 13</button>
+                            <button class="phone-btn" data-device="iphone-13-mini">iPhone 13 Mini</button>
+                            <button class="phone-btn" data-device="iphone-12">iPhone 12</button>
+                            <button class="phone-btn" data-device="iphone-11">iPhone 11</button>
+                            <button class="phone-btn" data-device="iphone-x">iPhone X</button>
                         </div>
                     </div>
                     
                     <div class="phone-category">
                         <div class="category-title">Android</div>
                         <div>
-                            <button class="phone-btn android" data-device="samsung-s24">Samsung S24</button>
-                            <button class="phone-btn android" data-device="samsung-s23">Samsung S23</button>
-                            <button class="phone-btn android" data-device="samsung-s22">Samsung S22</button>
-                            <button class="phone-btn android" data-device="pixel-8">Google Pixel 8</button>
-                            <button class="phone-btn android" data-device="pixel-7">Google Pixel 7</button>
-                            <button class="phone-btn android" data-device="pixel-6">Google Pixel 6</button>
-                            <button class="phone-btn android" data-device="oneplus-12">OnePlus 12</button>
-                            <button class="phone-btn android" data-device="oneplus-11">OnePlus 11</button>
-                            <button class="phone-btn android" data-device="oneplus-10">OnePlus 10</button>
-                            <button class="phone-btn android" data-device="xiaomi-14">Xiaomi 14</button>
-                            <button class="phone-btn android" data-device="xiaomi-13">Xiaomi 13</button>
+                            <button class="phone-btn" data-device="samsung-s23">Samsung S23</button>
+                            <button class="phone-btn" data-device="samsung-s22">Samsung S22</button>
+                            <button class="phone-btn" data-device="pixel-7">Google Pixel 7</button>
+                            <button class="phone-btn" data-device="pixel-6">Google Pixel 6</button>
+                            <button class="phone-btn" data-device="oneplus-10">OnePlus 10</button>
+                            <button class="phone-btn" data-device="xiaomi-13">Xiaomi 13</button>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="preview-section">
-                <h2>Phone Preview (Real Physical Size)</h2>
+                <h2>Phone Preview</h2>
                 <div class="preview-container">
                     <div class="phone-frame" id="phoneFrame">
                         <div class="phone-screen" id="phoneScreen">
                             <img id="previewImage" alt="Preview">
                             <div class="placeholder-text" id="placeholderText">
-                                Your image will appear here at 100% size<br>
+                                Your image will appear here at its actual pixel size<br>
                                 Drag to reposition the image
                             </div>
                         </div>
@@ -480,16 +421,12 @@
                 <div class="screen-info">
                     <div class="info-grid">
                         <div class="info-item">
-                            <span class="info-label">Your Screen Resolution:</span>
-                            <span id="screenResolution">Calculating...</span>
-                        </div>
-                        <div class="info-item">
                             <span class="info-label">Image Dimensions:</span>
                             <span id="imageDimensions">-</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Selected Device:</span>
-                            <span id="selectedDevice">iPhone 17</span>
+                            <span id="selectedDevice">iPhone 15</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Physical Size:</span>
@@ -499,6 +436,10 @@
                             <span class="info-label">Screen Resolution:</span>
                             <span id="deviceResolution">1179 × 2556 px</span>
                         </div>
+                        <div class="info-item">
+                            <span class="info-label">Orientation:</span>
+                            <span id="orientation">Portrait</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -506,348 +447,228 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Phone specifications (physical dimensions in cm and screen resolution)
-            const phoneSpecs = {
-                // iPhone 17 Series (predicted)
-                'iphone-17': { 
-                    width: 7.16, 
-                    height: 14.76, 
-                    name: 'iPhone 17', 
-                    type: 'apple',
-                    screenWidth: 1179,
-                    screenHeight: 2556
-                },
-                'iphone-17-pro': { 
-                    width: 7.09, 
-                    height: 14.66, 
-                    name: 'iPhone 17 Pro', 
-                    type: 'apple',
-                    screenWidth: 1179,
-                    screenHeight: 2556
-                },
-                'iphone-17-pro-max': { 
-                    width: 7.69, 
-                    height: 16.54, 
-                    name: 'iPhone 17 Pro Max', 
-                    type: 'apple',
-                    screenWidth: 1290,
-                    screenHeight: 2796
-                },
-                
-                // iPhone 16 Series (predicted)
-                'iphone-16': { 
-                    width: 7.16, 
-                    height: 14.76, 
-                    name: 'iPhone 16', 
-                    type: 'apple',
-                    screenWidth: 1179,
-                    screenHeight: 2556
-                },
-                'iphone-16-pro': { 
-                    width: 7.09, 
-                    height: 14.66, 
-                    name: 'iPhone 16 Pro', 
-                    type: 'apple',
-                    screenWidth: 1179,
-                    screenHeight: 2556
-                },
-                'iphone-16-pro-max': { 
-                    width: 7.69, 
-                    height: 16.54, 
-                    name: 'iPhone 16 Pro Max', 
-                    type: 'apple',
-                    screenWidth: 1290,
-                    screenHeight: 2796
-                },
-                
-                // iPhone 15 Series
-                'iphone-15': { 
-                    width: 7.16, 
-                    height: 14.76, 
-                    name: 'iPhone 15', 
-                    type: 'apple',
-                    screenWidth: 1179,
-                    screenHeight: 2556
-                },
-                'iphone-15-pro': { 
-                    width: 7.09, 
-                    height: 14.66, 
-                    name: 'iPhone 15 Pro', 
-                    type: 'apple',
-                    screenWidth: 1179,
-                    screenHeight: 2556
-                },
-                'iphone-15-pro-max': { 
-                    width: 7.69, 
-                    height: 16.54, 
-                    name: 'iPhone 15 Pro Max', 
-                    type: 'apple',
-                    screenWidth: 1290,
-                    screenHeight: 2796
-                },
-                
-                // iPhone 14 Series
-                'iphone-14': { 
-                    width: 7.15, 
-                    height: 14.67, 
-                    name: 'iPhone 14', 
-                    type: 'apple',
-                    screenWidth: 1170,
-                    screenHeight: 2532
-                },
-                'iphone-14-pro': { 
-                    width: 7.07, 
-                    height: 14.75, 
-                    name: 'iPhone 14 Pro', 
-                    type: 'apple',
-                    screenWidth: 1179,
-                    screenHeight: 2556
-                },
-                'iphone-14-pro-max': { 
-                    width: 7.69, 
-                    height: 16.54, 
-                    name: 'iPhone 14 Pro Max', 
-                    type: 'apple',
-                    screenWidth: 1290,
-                    screenHeight: 2796
-                },
-                
-                // iPhone 13 Series
-                'iphone-13': { 
-                    width: 7.15, 
-                    height: 14.67, 
-                    name: 'iPhone 13', 
-                    type: 'apple',
-                    screenWidth: 1170,
-                    screenHeight: 2532
-                },
-                'iphone-13-mini': { 
-                    width: 6.42, 
-                    height: 13.15, 
-                    name: 'iPhone 13 Mini', 
-                    type: 'apple',
-                    screenWidth: 1080,
-                    screenHeight: 2340
-                },
-                'iphone-13-pro': { 
-                    width: 7.15, 
-                    height: 14.67, 
-                    name: 'iPhone 13 Pro', 
-                    type: 'apple',
-                    screenWidth: 1170,
-                    screenHeight: 2532
-                },
-                'iphone-13-pro-max': { 
-                    width: 7.69, 
-                    height: 16.54, 
-                    name: 'iPhone 13 Pro Max', 
-                    type: 'apple',
-                    screenWidth: 1284,
-                    screenHeight: 2778
-                },
-                
-                // iPhone 12 Series
-                'iphone-12': { 
-                    width: 7.15, 
-                    height: 14.67, 
-                    name: 'iPhone 12', 
-                    type: 'apple',
-                    screenWidth: 1170,
-                    screenHeight: 2532
-                },
-                'iphone-12-pro': { 
-                    width: 7.15, 
-                    height: 14.67, 
-                    name: 'iPhone 12 Pro', 
-                    type: 'apple',
-                    screenWidth: 1170,
-                    screenHeight: 2532
-                },
-                'iphone-12-pro-max': { 
-                    width: 7.69, 
-                    height: 16.54, 
-                    name: 'iPhone 12 Pro Max', 
-                    type: 'apple',
-                    screenWidth: 1284,
-                    screenHeight: 2778
-                },
-                
-                // iPhone 11 Series
-                'iphone-11': { 
-                    width: 7.57, 
-                    height: 15.09, 
-                    name: 'iPhone 11', 
-                    type: 'apple',
-                    screenWidth: 828,
-                    screenHeight: 1792
-                },
-                'iphone-11-pro': { 
-                    width: 7.09, 
-                    height: 14.36, 
-                    name: 'iPhone 11 Pro', 
-                    type: 'apple',
-                    screenWidth: 1125,
-                    screenHeight: 2436
-                },
-                'iphone-11-pro-max': { 
-                    width: 7.69, 
-                    height: 16.54, 
-                    name: 'iPhone 11 Pro Max', 
-                    type: 'apple',
-                    screenWidth: 1242,
-                    screenHeight: 2688
-                },
-                
-                // iPhone X
-                'iphone-x': { 
-                    width: 7.09, 
-                    height: 14.36, 
-                    name: 'iPhone X', 
-                    type: 'apple',
-                    screenWidth: 1125,
-                    screenHeight: 2436
-                },
-                
-                // Androids
-                'samsung-s24': { 
-                    width: 7.06, 
-                    height: 14.66, 
-                    name: 'Samsung Galaxy S24', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2340
-                },
-                'samsung-s23': { 
-                    width: 7.06, 
-                    height: 14.66, 
-                    name: 'Samsung Galaxy S23', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2340
-                },
-                'samsung-s22': { 
-                    width: 7.06, 
-                    height: 14.66, 
-                    name: 'Samsung Galaxy S22', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2340
-                },
-                'pixel-8': { 
-                    width: 7.32, 
-                    height: 15.56, 
-                    name: 'Google Pixel 8', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2400
-                },
-                'pixel-7': { 
-                    width: 7.32, 
-                    height: 15.56, 
-                    name: 'Google Pixel 7', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2400
-                },
-                'pixel-6': { 
-                    width: 7.41, 
-                    height: 15.87, 
-                    name: 'Google Pixel 6', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2400
-                },
-                'oneplus-12': { 
-                    width: 7.39, 
-                    height: 16.32, 
-                    name: 'OnePlus 12', 
-                    type: 'android',
-                    screenWidth: 1440,
-                    screenHeight: 3168
-                },
-                'oneplus-11': { 
-                    width: 7.39, 
-                    height: 16.32, 
-                    name: 'OnePlus 11', 
-                    type: 'android',
-                    screenWidth: 1440,
-                    screenHeight: 3168
-                },
-                'oneplus-10': { 
-                    width: 7.39, 
-                    height: 16.32, 
-                    name: 'OnePlus 10', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2400
-                },
-                'xiaomi-14': { 
-                    width: 7.15, 
-                    height: 15.24, 
-                    name: 'Xiaomi 14', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2400
-                },
-                'xiaomi-13': { 
-                    width: 7.15, 
-                    height: 15.24, 
-                    name: 'Xiaomi 13', 
-                    type: 'android',
-                    screenWidth: 1080,
-                    screenHeight: 2400
-                }
-            };
+        // Phone specifications (physical dimensions in cm and screen resolution)
+        const phoneSpecs = {
+            // iPhone 15 Series
+            'iphone-15': { 
+                width: 7.16, 
+                height: 14.76, 
+                name: 'iPhone 15', 
+                screenWidth: 1179,
+                screenHeight: 2556
+            },
+            'iphone-15-pro': { 
+                width: 7.09, 
+                height: 14.66, 
+                name: 'iPhone 15 Pro', 
+                screenWidth: 1179,
+                screenHeight: 2556
+            },
+            'iphone-15-pro-max': { 
+                width: 7.69, 
+                height: 16.54, 
+                name: 'iPhone 15 Pro Max', 
+                screenWidth: 1290,
+                screenHeight: 2796
+            },
+            
+            // iPhone 16 Series
+            'iphone-16': { 
+                width: 6.98, 
+                height: 15.12, 
+                name: 'iPhone 16', 
+                screenWidth: 1114,
+                screenHeight: 2412
+            },
+            'iphone-16-pro': { 
+                width: 7.88, 
+                height: 17.08, 
+                name: 'iPhone 16 Pro', 
+                screenWidth: 1323,
+                screenHeight: 2868
+            },
+            'iphone-16-pro-max': { 
+                width: 8.23, 
+                height: 17.83, 
+                name: 'iPhone 16 Pro Max', 
+                screenWidth: 1382,
+                screenHeight: 2994
+            },
+            
+            // iPhone 17 Series
+            'iphone-17': { 
+                width: 7.14, 
+                height: 15.48, 
+                name: 'iPhone 17', 
+                screenWidth: 1148,
+                screenHeight: 2488
+            },
+            'iphone-17-pro': { 
+                width: 8.08, 
+                height: 17.51, 
+                name: 'iPhone 17 Pro', 
+                screenWidth: 1357,
+                screenHeight: 2940
+            },
+            'iphone-17-pro-max': { 
+                width: 8.45, 
+                height: 18.30, 
+                name: 'iPhone 17 Pro Max', 
+                screenWidth: 1418,
+                screenHeight: 3072
+            },
+            
+            // iPhone 14 Series
+            'iphone-14': { 
+                width: 7.15, 
+                height: 14.67, 
+                name: 'iPhone 14', 
+                screenWidth: 1170,
+                screenHeight: 2532
+            },
+            'iphone-14-pro': { 
+                width: 7.07, 
+                height: 14.75, 
+                name: 'iPhone 14 Pro', 
+                screenWidth: 1179,
+                screenHeight: 2556
+            },
+            'iphone-14-pro-max': { 
+                width: 7.69, 
+                height: 16.54, 
+                name: 'iPhone 14 Pro Max', 
+                screenWidth: 1290,
+                screenHeight: 2796
+            },
+            
+            // iPhone 13 Series
+            'iphone-13': { 
+                width: 7.15, 
+                height: 14.67, 
+                name: 'iPhone 13', 
+                screenWidth: 1170,
+                screenHeight: 2532
+            },
+            'iphone-13-mini': { 
+                width: 6.42, 
+                height: 13.15, 
+                name: 'iPhone 13 Mini', 
+                screenWidth: 1080,
+                screenHeight: 2340
+            },
+            
+            // iPhone 12 Series
+            'iphone-12': { 
+                width: 7.15, 
+                height: 14.67, 
+                name: 'iPhone 12', 
+                screenWidth: 1170,
+                screenHeight: 2532
+            },
+            
+            // iPhone 11 Series
+            'iphone-11': { 
+                width: 7.57, 
+                height: 15.09, 
+                name: 'iPhone 11', 
+                screenWidth: 828,
+                screenHeight: 1792
+            },
+            
+            // iPhone X
+            'iphone-x': { 
+                width: 7.09, 
+                height: 14.36, 
+                name: 'iPhone X', 
+                screenWidth: 1125,
+                screenHeight: 2436
+            },
+            
+            // Androids
+            'samsung-s23': { 
+                width: 7.06, 
+                height: 14.66, 
+                name: 'Samsung Galaxy S23', 
+                screenWidth: 1080,
+                screenHeight: 2340
+            },
+            'samsung-s22': { 
+                width: 7.06, 
+                height: 14.66, 
+                name: 'Samsung Galaxy S22', 
+                screenWidth: 1080,
+                screenHeight: 2340
+            },
+            'pixel-7': { 
+                width: 7.32, 
+                height: 15.56, 
+                name: 'Google Pixel 7', 
+                screenWidth: 1080,
+                screenHeight: 2400
+            },
+            'pixel-6': { 
+                width: 7.41, 
+                height: 15.87, 
+                name: 'Google Pixel 6', 
+                screenWidth: 1080,
+                screenHeight: 2400
+            },
+            'oneplus-10': { 
+                width: 7.39, 
+                height: 16.32, 
+                name: 'OnePlus 10', 
+                screenWidth: 1080,
+                screenHeight: 2400
+            },
+            'xiaomi-13': { 
+                width: 7.15, 
+                height: 15.24, 
+                name: 'Xiaomi 13', 
+                screenWidth: 1080,
+                screenHeight: 2400
+            }
+        };
 
-            // Get DOM elements
-            const fileInput = document.getElementById('fileInput');
-            const uploadArea = document.getElementById('uploadArea');
-            const browseBtn = document.getElementById('browseBtn');
-            const previewImage = document.getElementById('previewImage');
-            const placeholderText = document.getElementById('placeholderText');
-            const resetBtn = document.getElementById('resetBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const screenResolution = document.getElementById('screenResolution');
-            const imageDimensions = document.getElementById('imageDimensions');
-            const selectedDevice = document.getElementById('selectedDevice');
-            const physicalSize = document.getElementById('physicalSize');
-            const deviceResolution = document.getElementById('deviceResolution');
-            const phoneFrame = document.getElementById('phoneFrame');
-            const phoneScreen = document.getElementById('phoneScreen');
-            const phoneButtons = document.querySelectorAll('.phone-btn');
-            const currentPPI = document.getElementById('currentPPI');
-            const calculatorToggle = document.getElementById('calculatorToggle');
-            const calculatorContent = document.getElementById('calculatorContent');
-            const screenWidthInput = document.getElementById('screenWidth');
-            const screenHeightInput = document.getElementById('screenHeight');
-            const screenDiagonalInput = document.getElementById('screenDiagonal');
-            const calculateBtn = document.getElementById('calculateBtn');
-            const calculatedPPI = document.getElementById('calculatedPPI');
-            
-            // Drag variables
-            let isDragging = false;
-            let startX, startY;
-            let initialX, initialY;
-            
-            // Calculate screen PPI
-            let screenPPI = calculateScreenPPI();
-            currentPPI.textContent = Math.round(screenPPI);
-            
-            // Set screen resolution info
-            screenResolution.textContent = `${window.screen.width} × ${window.screen.height} (${Math.round(screenPPI)} PPI)`;
-            
-            // Set initial phone (iPhone 17)
-            let currentPhone = 'iphone-17';
-            updatePhoneDisplay();
-            
-            // Set calculator inputs to current screen values
+        // DOM Elements
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const browseBtn = document.getElementById('browseBtn');
+        const previewImage = document.getElementById('previewImage');
+        const placeholderText = document.getElementById('placeholderText');
+        const resetBtn = document.getElementById('resetBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const imageDimensions = document.getElementById('imageDimensions');
+        const selectedDevice = document.getElementById('selectedDevice');
+        const physicalSize = document.getElementById('physicalSize');
+        const deviceResolution = document.getElementById('deviceResolution');
+        const orientationDisplay = document.getElementById('orientation');
+        const phoneFrame = document.getElementById('phoneFrame');
+        const phoneScreen = document.getElementById('phoneScreen');
+        const phoneButtons = document.querySelectorAll('.phone-btn');
+        const rotationButtons = document.querySelectorAll('.rotation-btn');
+        const currentPPI = document.getElementById('currentPPI');
+        const screenWidthInput = document.getElementById('screenWidth');
+        const screenHeightInput = document.getElementById('screenHeight');
+        const screenDiagonalInput = document.getElementById('screenDiagonal');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const calculatedPPI = document.getElementById('calculatedPPI');
+
+        // State
+        let currentPhone = 'iphone-15';
+        let currentOrientation = 'portrait';
+        let isDragging = false;
+        let dragStartX, dragStartY;
+        let imageStartX, imageStartY;
+        let screenPPI = 96;
+
+        // Initialize
+        function init() {
+            // Set current screen dimensions
             screenWidthInput.value = window.screen.width;
             screenHeightInput.value = window.screen.height;
             
-            // Event listeners
+            // Set up event listeners
             browseBtn.addEventListener('click', () => fileInput.click());
-            
             uploadArea.addEventListener('click', () => fileInput.click());
             
             uploadArea.addEventListener('dragover', (e) => {
@@ -870,9 +691,7 @@
             });
             
             fileInput.addEventListener('change', handleImageUpload);
-            
             resetBtn.addEventListener('click', resetPreview);
-            
             downloadBtn.addEventListener('click', downloadPreview);
             
             phoneButtons.forEach(button => {
@@ -884,9 +703,14 @@
                 });
             });
             
-            calculatorToggle.addEventListener('click', function() {
-                calculatorContent.classList.toggle('hidden');
-                calculatorToggle.textContent = calculatorContent.classList.contains('hidden') ? '+' : '−';
+            rotationButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    rotationButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentOrientation = this.getAttribute('data-orientation');
+                    orientationDisplay.textContent = currentOrientation.charAt(0).toUpperCase() + currentOrientation.slice(1);
+                    updatePhoneDisplay();
+                });
             });
             
             calculateBtn.addEventListener('click', function() {
@@ -899,307 +723,287 @@
                     calculatedPPI.textContent = Math.round(ppi);
                     screenPPI = ppi;
                     currentPPI.textContent = Math.round(ppi);
-                    screenResolution.textContent = `${width} × ${height} (${Math.round(ppi)} PPI)`;
                     updatePhoneDisplay();
                 }
             });
             
-            // Drag event listeners
-            phoneScreen.addEventListener('mousedown', startDrag);
+            // Set up drag events
+            previewImage.addEventListener('mousedown', startDrag);
             document.addEventListener('mousemove', drag);
             document.addEventListener('mouseup', stopDrag);
             
-            // Functions
-            function calculateScreenPPI() {
-                // Calculate screen PPI based on diagonal size and resolution
-                const diagonalPixels = Math.sqrt(
-                    Math.pow(window.screen.width, 2) + 
-                    Math.pow(window.screen.height, 2)
-                );
+            // Initialize display
+            updatePhoneDisplay();
+        }
+
+        // Convert cm to pixels based on PPI
+        function cmToPixels(cm) {
+            const inches = cm / 2.54;
+            return inches * screenPPI;
+        }
+
+        // Handle image upload
+        function handleImageUpload() {
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
                 
-                // Estimate diagonal size in inches based on common device sizes
-                let diagonalInches;
-                if (window.screen.width <= 1024) {
-                    diagonalInches = 13; // Laptop
-                } else if (window.screen.width <= 1440) {
-                    diagonalInches = 15; // Medium laptop
-                } else if (window.screen.width <= 1920) {
-                    diagonalInches = 24; // Desktop monitor
-                } else {
-                    diagonalInches = 27; // Large monitor
-                }
-                
-                return diagonalPixels / diagonalInches;
-            }
-            
-            function cmToPixels(cm) {
-                // Convert cm to pixels based on screen PPI
-                const inches = cm / 2.54;
-                return inches * screenPPI;
-            }
-            
-            function handleImageUpload() {
-                if (fileInput.files && fileInput.files[0]) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        previewImage.onload = function() {
-                            // Display image at 100% size
-                            const imgWidth = previewImage.naturalWidth;
-                            const imgHeight = previewImage.naturalHeight;
-                            
-                            previewImage.style.width = `${imgWidth}px`;
-                            previewImage.style.height = `${imgHeight}px`;
-                            previewImage.style.display = 'block';
-                            previewImage.style.left = '0px';
-                            previewImage.style.top = '0px';
-                            placeholderText.style.display = 'none';
-                            
-                            imageDimensions.textContent = `${imgWidth} × ${imgHeight} px`;
-                            
-                            // Update phone screen size
-                            updatePhoneScreen();
-                        };
+                reader.onload = function(e) {
+                    previewImage.onload = function() {
+                        // Display image dimensions
+                        const imgWidth = previewImage.naturalWidth;
+                        const imgHeight = previewImage.naturalHeight;
                         
-                        previewImage.src = e.target.result;
+                        imageDimensions.textContent = `${imgWidth} × ${imgHeight} px`;
+                        
+                        // Show the image and hide placeholder
+                        previewImage.style.display = 'block';
+                        placeholderText.style.display = 'none';
+                        
+                        // Position the image at its actual pixel size, centered
+                        positionImage();
                     };
                     
-                    reader.readAsDataURL(fileInput.files[0]);
-                }
-            }
-            
-            function updatePhoneDisplay() {
-                const phone = phoneSpecs[currentPhone];
-                selectedDevice.textContent = phone.name;
-                physicalSize.textContent = `${phone.width} × ${phone.height} cm`;
-                deviceResolution.textContent = `${phone.screenWidth} × ${phone.screenHeight} px`;
-                
-                // Update phone frame appearance based on type
-                if (phone.type === 'apple') {
-                    phoneFrame.style.background = 'linear-gradient(135deg, #000, #333)';
-                    phoneFrame.style.borderRadius = '40px';
-                    phoneFrame.style.boxShadow = `
-                        0 0 0 4px #333,
-                        0 0 0 8px #000,
-                        0 20px 40px rgba(0,0,0,0.5),
-                        inset 0 0 20px rgba(255,255,255,0.1)
-                    `;
-                } else {
-                    phoneFrame.style.background = 'linear-gradient(135deg, #1a2a6c, #3a4a9c)';
-                    phoneFrame.style.borderRadius = '25px';
-                    phoneFrame.style.boxShadow = `
-                        0 0 0 3px #3a4a9c,
-                        0 0 0 6px #1a2a6c,
-                        0 20px 40px rgba(0,0,0,0.5),
-                        inset 0 0 20px rgba(255,255,255,0.1)
-                    `;
-                }
-                
-                // Update phone screen
-                updatePhoneScreen();
-            }
-            
-            function updatePhoneScreen() {
-                const phone = phoneSpecs[currentPhone];
-                
-                // Convert physical dimensions to pixels
-                const frameWidthPx = cmToPixels(phone.width);
-                const frameHeightPx = cmToPixels(phone.height);
-                
-                // Set phone frame size
-                phoneFrame.style.width = `${frameWidthPx}px`;
-                phoneFrame.style.height = `${frameHeightPx}px`;
-                phoneFrame.style.padding = '15px';
-                
-                // Calculate screen size (approximately 90% of frame size)
-                const screenWidthPx = frameWidthPx * 0.9;
-                const screenHeightPx = frameHeightPx * 0.95;
-                
-                // Set phone screen size
-                phoneScreen.style.width = `${screenWidthPx}px`;
-                phoneScreen.style.height = `${screenHeightPx}px`;
-                phoneScreen.style.borderRadius = phone.type === 'apple' ? '30px' : '15px';
-                
-                // Add notch for iPhones
-                if (phone.type === 'apple') {
-                    phoneScreen.style.position = 'relative';
-                    
-                    // Remove existing notch if any
-                    const existingNotch = phoneScreen.querySelector('.phone-notch');
-                    if (existingNotch) {
-                        existingNotch.remove();
-                    }
-                    
-                    const notch = document.createElement('div');
-                    notch.className = 'phone-notch';
-                    notch.style.position = 'absolute';
-                    notch.style.top = '0';
-                    notch.style.left = '50%';
-                    notch.style.transform = 'translateX(-50%)';
-                    notch.style.width = '30%';
-                    notch.style.height = '20px';
-                    notch.style.background = '#000';
-                    notch.style.borderRadius = '0 0 10px 10px';
-                    notch.style.zIndex = '10';
-                    
-                    phoneScreen.appendChild(notch);
-                }
-            }
-            
-            function resetPreview() {
-                fileInput.value = '';
-                previewImage.src = '';
-                previewImage.style.display = 'none';
-                previewImage.style.left = '0px';
-                previewImage.style.top = '0px';
-                placeholderText.style.display = 'block';
-                imageDimensions.textContent = '-';
-            }
-            
-            function downloadPreview() {
-                if (!previewImage.src) {
-                    alert('Please upload an image first.');
-                    return;
-                }
-                
-                const phone = phoneSpecs[currentPhone];
-                const frameWidthPx = cmToPixels(phone.width);
-                const frameHeightPx = cmToPixels(phone.height);
-                
-                // Create a canvas to draw the phone frame and image
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                // Set canvas dimensions
-                canvas.width = frameWidthPx;
-                canvas.height = frameHeightPx;
-                
-                // Draw phone frame
-                if (phone.type === 'apple') {
-                    // iPhone frame
-                    ctx.fillStyle = '#000';
-                    ctx.fillRect(0, 0, frameWidthPx, frameHeightPx);
-                    
-                    // Frame border
-                    ctx.strokeStyle = '#333';
-                    ctx.lineWidth = 4;
-                    ctx.strokeRect(2, 2, frameWidthPx-4, frameHeightPx-4);
-                    
-                    // Inner frame
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = 8;
-                    ctx.strokeRect(4, 4, frameWidthPx-8, frameHeightPx-8);
-                } else {
-                    // Android frame
-                    const gradient = ctx.createLinearGradient(0, 0, frameWidthPx, frameHeightPx);
-                    gradient.addColorStop(0, '#1a2a6c');
-                    gradient.addColorStop(1, '#3a4a9c');
-                    
-                    ctx.fillStyle = gradient;
-                    ctx.fillRect(0, 0, frameWidthPx, frameHeightPx);
-                    
-                    // Frame border
-                    ctx.strokeStyle = '#3a4a9c';
-                    ctx.lineWidth = 3;
-                    ctx.strokeRect(1.5, 1.5, frameWidthPx-3, frameHeightPx-3);
-                    
-                    // Inner frame
-                    ctx.strokeStyle = '#1a2a6c';
-                    ctx.lineWidth = 6;
-                    ctx.strokeRect(3, 3, frameWidthPx-6, frameHeightPx-6);
-                }
-                
-                // Draw screen
-                ctx.fillStyle = '#fff';
-                const screenX = frameWidthPx * 0.05;
-                const screenY = frameHeightPx * 0.025;
-                const screenWidth = frameWidthPx * 0.9;
-                const screenHeight = frameHeightPx * 0.95;
-                
-                if (phone.type === 'apple') {
-                    ctx.fillRect(screenX, screenY, screenWidth, screenHeight);
-                    
-                    // Draw notch
-                    ctx.fillStyle = '#000';
-                    const notchWidth = screenWidth * 0.3;
-                    const notchX = screenX + (screenWidth - notchWidth) / 2;
-                    ctx.fillRect(notchX, screenY, notchWidth, 20);
-                    ctx.fillStyle = '#fff';
-                } else {
-                    ctx.fillRect(screenX, screenY, screenWidth, screenHeight);
-                }
-                
-                // Draw the uploaded image on the screen
-                const img = new Image();
-                img.onload = function() {
-                    // Calculate position to center the image
-                    const imgX = screenX + (screenWidth - img.width) / 2;
-                    const imgY = screenY + (screenHeight - img.height) / 2;
-                    
-                    ctx.drawImage(img, imgX, imgY, img.width, img.height);
-                    
-                    // Create download link
-                    const link = document.createElement('a');
-                    link.download = `phone-preview-${phone.name.replace(/\s+/g, '-').toLowerCase()}.png`;
-                    link.href = canvas.toDataURL();
-                    link.click();
+                    previewImage.src = e.target.result;
                 };
                 
-                img.src = previewImage.src;
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
+        // Update phone display
+        function updatePhoneDisplay() {
+            const phone = phoneSpecs[currentPhone];
+            selectedDevice.textContent = phone.name;
+            
+            // Update phone resolution display based on orientation
+            let displayWidth, displayHeight;
+            if (currentOrientation === 'portrait') {
+                displayWidth = phone.screenWidth;
+                displayHeight = phone.screenHeight;
+                physicalSize.textContent = `${phone.width} × ${phone.height} cm`;
+            } else {
+                // For landscape: swap dimensions and show wider side first
+                displayWidth = phone.screenHeight;
+                displayHeight = phone.screenWidth;
+                physicalSize.textContent = `${phone.height} × ${phone.width} cm`; // Wider side first
             }
             
-            // Drag functions
-            function startDrag(e) {
-                if (!previewImage.src || e.target !== previewImage) return;
-                
-                isDragging = true;
-                startX = e.clientX;
-                startY = e.clientY;
-                
-                // Get current position
-                initialX = parseInt(previewImage.style.left) || 0;
-                initialY = parseInt(previewImage.style.top) || 0;
-                
-                // Add dragging class
-                previewImage.classList.add('dragging');
-                phoneScreen.classList.add('dragging');
-                
-                e.preventDefault();
+            deviceResolution.textContent = `${displayWidth} × ${displayHeight} px`;
+            
+            // Update phone frame and screen
+            updatePhoneFrame();
+            
+            // Position the image if one is loaded
+            if (previewImage.src) {
+                positionImage();
+            }
+        }
+
+        // Update phone frame and screen
+        function updatePhoneFrame() {
+            const phone = phoneSpecs[currentPhone];
+            
+            // Calculate physical dimensions in pixels
+            let frameWidthPx, frameHeightPx;
+            if (currentOrientation === 'portrait') {
+                frameWidthPx = cmToPixels(phone.width);
+                frameHeightPx = cmToPixels(phone.height);
+            } else {
+                // For landscape: swap dimensions to show wider side at bottom
+                frameWidthPx = cmToPixels(phone.height);  // Wider dimension becomes width
+                frameHeightPx = cmToPixels(phone.width);  // Narrower dimension becomes height
             }
             
-            function drag(e) {
-                if (!isDragging) return;
-                
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-                
-                // Calculate new position
-                let newX = initialX + dx;
-                let newY = initialY + dy;
-                
-                // Constrain dragging to keep image within screen bounds
-                const screenRect = phoneScreen.getBoundingClientRect();
-                const imgRect = previewImage.getBoundingClientRect();
-                
-                const maxX = 0;
-                const minX = screenRect.width - imgRect.width;
-                const maxY = 0;
-                const minY = screenRect.height - imgRect.height;
-                
-                newX = Math.max(minX, Math.min(maxX, newX));
-                newY = Math.max(minY, Math.min(maxY, newY));
-                
-                // Apply new position
-                previewImage.style.left = `${newX}px`;
-                previewImage.style.top = `${newY}px`;
+            // Set phone frame size
+            phoneFrame.style.width = `${frameWidthPx}px`;
+            phoneFrame.style.height = `${frameHeightPx}px`;
+            
+            // Calculate screen size (approximately 90% of frame size)
+            const screenDisplayWidth = frameWidthPx * 0.9;
+            const screenDisplayHeight = frameHeightPx * 0.95;
+            
+            // Set phone screen size
+            phoneScreen.style.width = `${screenDisplayWidth}px`;
+            phoneScreen.style.height = `${screenDisplayHeight}px`;
+            
+            // Apply rotation to phone frame (only for landscape)
+            if (currentOrientation === 'landscape') {
+                phoneFrame.style.transform = 'rotate(90deg)';
+            } else {
+                phoneFrame.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Position the image at its actual pixel size, centered
+        function positionImage() {
+            if (!previewImage.src) return;
+            
+            const phone = phoneSpecs[currentPhone];
+            
+            // Get the actual pixel dimensions of the image
+            const imgWidth = previewImage.naturalWidth;
+            const imgHeight = previewImage.naturalHeight;
+            
+            // Get phone screen dimensions in pixels
+            let screenWidth, screenHeight;
+            if (currentOrientation === 'portrait') {
+                screenWidth = phone.screenWidth;
+                screenHeight = phone.screenHeight;
+            } else {
+                screenWidth = phone.screenHeight;
+                screenHeight = phone.screenWidth;
             }
             
-            function stopDrag() {
-                isDragging = false;
-                previewImage.classList.remove('dragging');
-                phoneScreen.classList.remove('dragging');
+            // Calculate scale to fit the screen display
+            const screenDisplayWidth = phoneScreen.offsetWidth;
+            const screenDisplayHeight = phoneScreen.offsetHeight;
+            
+            const scaleX = screenDisplayWidth / screenWidth;
+            const scaleY = screenDisplayHeight / screenHeight;
+            
+            // Set image to its actual pixel size scaled to phone screen
+            previewImage.style.width = `${imgWidth * scaleX}px`;
+            previewImage.style.height = `${imgHeight * scaleY}px`;
+            
+            // Calculate center position
+            const centerX = (screenDisplayWidth - (imgWidth * scaleX)) / 2;
+            const centerY = (screenDisplayHeight - (imgHeight * scaleY)) / 2;
+            
+            // Position the image at the center
+            previewImage.style.left = `${centerX}px`;
+            previewImage.style.top = `${centerY}px`;
+        }
+
+        // Reset preview
+        function resetPreview() {
+            fileInput.value = '';
+            previewImage.src = '';
+            previewImage.style.display = 'none';
+            previewImage.style.left = '0px';
+            previewImage.style.top = '0px';
+            placeholderText.style.display = 'block';
+            imageDimensions.textContent = '-';
+        }
+
+        // Download preview
+        function downloadPreview() {
+            if (!previewImage.src) {
+                alert('Please upload an image first.');
+                return;
             }
-        });
+            
+            const phone = phoneSpecs[currentPhone];
+            
+            // Determine screen dimensions based on orientation
+            let screenWidth, screenHeight;
+            if (currentOrientation === 'portrait') {
+                screenWidth = phone.screenWidth;
+                screenHeight = phone.screenHeight;
+            } else {
+                screenWidth = phone.screenHeight;
+                screenHeight = phone.screenWidth;
+            }
+            
+            // Calculate physical dimensions in pixels
+            let frameWidthPx, frameHeightPx;
+            if (currentOrientation === 'portrait') {
+                frameWidthPx = cmToPixels(phone.width);
+                frameHeightPx = cmToPixels(phone.height);
+            } else {
+                frameWidthPx = cmToPixels(phone.height);
+                frameHeightPx = cmToPixels(phone.width);
+            }
+            
+            // Create a canvas to draw the phone frame and image
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = frameWidthPx;
+            canvas.height = frameHeightPx;
+            
+            // Draw phone frame
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, frameWidthPx, frameHeightPx);
+            
+            // Draw screen
+            ctx.fillStyle = '#fff';
+            const screenX = frameWidthPx * 0.05;
+            const screenY = frameHeightPx * 0.025;
+            const screenDisplayWidth = frameWidthPx * 0.9;
+            const screenDisplayHeight = frameHeightPx * 0.95;
+            
+            ctx.fillRect(screenX, screenY, screenDisplayWidth, screenDisplayHeight);
+            
+            // Draw the uploaded image on the screen
+            const img = new Image();
+            img.onload = function() {
+                // Calculate scale to fit the screen display
+                const scaleX = screenDisplayWidth / screenWidth;
+                const scaleY = screenDisplayHeight / screenHeight;
+                
+                // Get current image position
+                const imgX = parseInt(previewImage.style.left) || 0;
+                const imgY = parseInt(previewImage.style.top) || 0;
+                
+                // Calculate position on canvas
+                const canvasX = screenX + (imgX * scaleX);
+                const canvasY = screenY + (imgY * scaleY);
+                const canvasWidth = img.naturalWidth * scaleX;
+                const canvasHeight = img.naturalHeight * scaleY;
+                
+                ctx.drawImage(img, canvasX, canvasY, canvasWidth, canvasHeight);
+                
+                // Create download link
+                const link = document.createElement('a');
+                link.download = `phone-preview-${phone.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+            
+            img.src = previewImage.src;
+        }
+
+        // Drag functions
+        function startDrag(e) {
+            if (!previewImage.src) return;
+            
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            
+            // Get current position
+            imageStartX = parseInt(previewImage.style.left) || 0;
+            imageStartY = parseInt(previewImage.style.top) || 0;
+            
+            // Add dragging class
+            previewImage.classList.add('dragging');
+            
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            const dx = e.clientX - dragStartX;
+            const dy = e.clientY - dragStartY;
+            
+            // Calculate new position
+            const newX = imageStartX + dx;
+            const newY = imageStartY + dy;
+            
+            // Apply new position
+            previewImage.style.left = `${newX}px`;
+            previewImage.style.top = `${newY}px`;
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            previewImage.classList.remove('dragging');
+        }
+
+        // Initialize the application
+        init();
     </script>
 </body>
 </html>
